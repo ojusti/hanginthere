@@ -35,20 +35,34 @@ function connect() {
     };
   };
   client.connect(creds).then(function() {
-    return console.log('connected');
+    return console.log('Connected');
   }).done();
 }
 
 
 function onChatMessage(ev) {
   if(amIReceiving(ev)) {
+    var sender = resolveSender(ev.sender_id.chat_id);
     if(isUrgent(ev.chat_message)) {
-      return client.getentitybyid([ev.sender_id.chat_id]).then(function(response) {
-          return response.entities[0].properties.display_name;
-      }).then(makeNoiseAndExit);
+      return sender.then(makeNoiseAndExit);
     }
+    sender.then(logMessage);
     return iAmBusy(ev.conversation_id.id);
   }
+}
+
+function logMessage(sender) {
+  console.log(new Date() + ': message from ' + sender);
+}
+function logCall(sender) {
+  console.log(new Date() + ': call from ' + sender);
+}
+
+
+function resolveSender(chat_id) {
+  return client.getentitybyid([chat_id]).then(function(response) {
+      return response.entities[0].properties.display_name;
+  })
 }
 function isUrgent(chat_message) {
   return chat_message.message_content.segment[0].text == 'URGENT';
@@ -57,6 +71,7 @@ function isUrgent(chat_message) {
 function onHangoutEvent(ev) {
   if(amIReceiving(ev)) {
     if(isStart(ev.hangout_event)) {
+      resolveSender(ev.sender_id.chat_id).then(logCall);
       return iAmBusy(ev.conversation_id.id);
     }
   }
@@ -80,10 +95,10 @@ function iAmBusy(conversation_id) {
 }
 
 function makeNoiseAndExit(reason) {
-  open('sound.ogg');
+  open('sound.wav');
   console.log('Working time: ' + parseInt((new Date() - startDate) / 1000 / 60) + " minutes");
   if(typeof reason !== 'undefined') {
     console.log('Interruption reason: ' + reason);
   }
-  process.exit(0);
+  setTimeout(function() { process.exit(0); }, 5000);//open needs some time
 }

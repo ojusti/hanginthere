@@ -1,0 +1,27 @@
+{
+  "name": "hanginthere",
+  "version": "1.0.0-SNAPSHOT",
+  "description": "Pomodoro aware, Google Hangouts answering machine",
+  "main": "hangthere.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ojusti/hanginthere.git"
+  },
+  "keywords": [
+    "Pomodoro",
+    "Hangouts"
+  ],
+  "author": "Justi Oprescu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ojusti/hanginthere/issues"
+  },
+  "homepage": "https://github.com/ojusti/hanginthere#readme",
+  "dependencies": {
+    "hangupsjs": "^1.1.0",
+    "open": "0.0.5"
+  }
+}
